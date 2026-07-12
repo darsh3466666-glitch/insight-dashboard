@@ -174,7 +174,7 @@ function StagnationPage() {
     <div className="space-y-6">
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">تقرير العملاء الراكدين</h1>
+          <h1 className="text-2xl md:text-3xl font-black tracking-tight">تقرير العملاء الراكدين</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             العميل الراكد = آخر فاتورة بيع مضى عليها 60 يوم أو أكثر. النطاق: {scopeLabel} · تاريخ الاحتساب:{" "}
             {refDate.toLocaleDateString("ar-EG")}

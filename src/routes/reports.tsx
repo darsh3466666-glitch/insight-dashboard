@@ -133,7 +133,7 @@ function ReportsPage() {
   return (
     <div className="space-y-6">
       <header>
-        <h1 className="text-2xl font-bold tracking-tight">التقارير القابلة للتصدير</h1>
+        <h1 className="text-2xl md:text-3xl font-black tracking-tight">التقارير القابلة للتصدير</h1>
         <p className="mt-1 text-sm text-muted-foreground">
           تحميل بيانات كاملة على شكل Excel، أو طباعة تقرير احترافي للإدارة.
         </p>
@@ -172,7 +172,7 @@ function ReportsPage() {
       <Section title="ملخّص تنفيذي — قابل للطباعة" description="عرض متكامل بالأرقام الرئيسية">
         <div className="print:break-inside-avoid">
           <div className="mb-4 border-b border-border pb-3">
-            <h2 className="text-xl font-bold">تقرير المبيعات والمقبوضات — {meta.currentYear}</h2>
+            <h2 className="text-xl md:text-2xl font-black">تقرير المبيعات والمقبوضات — {meta.currentYear}</h2>
             <p className="text-xs text-muted-foreground">
               تاريخ الإصدار: {new Date().toLocaleDateString("ar-EG")} — يغطي الفترة {meta.years[0]}–{meta.years[meta.years.length - 1]}
             </p>
