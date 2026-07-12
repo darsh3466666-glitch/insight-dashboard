@@ -9,8 +9,50 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as StagnationRouteImport } from './routes/stagnation'
+import { Route as SalesRouteImport } from './routes/sales'
+import { Route as ReportsRouteImport } from './routes/reports'
+import { Route as ExecutiveRouteImport } from './routes/executive'
+import { Route as CustomersRouteImport } from './routes/customers'
+import { Route as CollectionsRouteImport } from './routes/collections'
+import { Route as ActivityAnalysisRouteImport } from './routes/activity-analysis'
 import { Route as IndexRouteImport } from './routes/index'
 
+const StagnationRoute = StagnationRouteImport.update({
+  id: '/stagnation',
+  path: '/stagnation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SalesRoute = SalesRouteImport.update({
+  id: '/sales',
+  path: '/sales',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportsRoute = ReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExecutiveRoute = ExecutiveRouteImport.update({
+  id: '/executive',
+  path: '/executive',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CustomersRoute = CustomersRouteImport.update({
+  id: '/customers',
+  path: '/customers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CollectionsRoute = CollectionsRouteImport.update({
+  id: '/collections',
+  path: '/collections',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ActivityAnalysisRoute = ActivityAnalysisRouteImport.update({
+  id: '/activity-analysis',
+  path: '/activity-analysis',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +61,130 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/activity-analysis': typeof ActivityAnalysisRoute
+  '/collections': typeof CollectionsRoute
+  '/customers': typeof CustomersRoute
+  '/executive': typeof ExecutiveRoute
+  '/reports': typeof ReportsRoute
+  '/sales': typeof SalesRoute
+  '/stagnation': typeof StagnationRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/activity-analysis': typeof ActivityAnalysisRoute
+  '/collections': typeof CollectionsRoute
+  '/customers': typeof CustomersRoute
+  '/executive': typeof ExecutiveRoute
+  '/reports': typeof ReportsRoute
+  '/sales': typeof SalesRoute
+  '/stagnation': typeof StagnationRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/activity-analysis': typeof ActivityAnalysisRoute
+  '/collections': typeof CollectionsRoute
+  '/customers': typeof CustomersRoute
+  '/executive': typeof ExecutiveRoute
+  '/reports': typeof ReportsRoute
+  '/sales': typeof SalesRoute
+  '/stagnation': typeof StagnationRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/activity-analysis'
+    | '/collections'
+    | '/customers'
+    | '/executive'
+    | '/reports'
+    | '/sales'
+    | '/stagnation'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/activity-analysis'
+    | '/collections'
+    | '/customers'
+    | '/executive'
+    | '/reports'
+    | '/sales'
+    | '/stagnation'
+  id:
+    | '__root__'
+    | '/'
+    | '/activity-analysis'
+    | '/collections'
+    | '/customers'
+    | '/executive'
+    | '/reports'
+    | '/sales'
+    | '/stagnation'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ActivityAnalysisRoute: typeof ActivityAnalysisRoute
+  CollectionsRoute: typeof CollectionsRoute
+  CustomersRoute: typeof CustomersRoute
+  ExecutiveRoute: typeof ExecutiveRoute
+  ReportsRoute: typeof ReportsRoute
+  SalesRoute: typeof SalesRoute
+  StagnationRoute: typeof StagnationRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/stagnation': {
+      id: '/stagnation'
+      path: '/stagnation'
+      fullPath: '/stagnation'
+      preLoaderRoute: typeof StagnationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sales': {
+      id: '/sales'
+      path: '/sales'
+      fullPath: '/sales'
+      preLoaderRoute: typeof SalesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reports': {
+      id: '/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof ReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/executive': {
+      id: '/executive'
+      path: '/executive'
+      fullPath: '/executive'
+      preLoaderRoute: typeof ExecutiveRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/customers': {
+      id: '/customers'
+      path: '/customers'
+      fullPath: '/customers'
+      preLoaderRoute: typeof CustomersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/collections': {
+      id: '/collections'
+      path: '/collections'
+      fullPath: '/collections'
+      preLoaderRoute: typeof CollectionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/activity-analysis': {
+      id: '/activity-analysis'
+      path: '/activity-analysis'
+      fullPath: '/activity-analysis'
+      preLoaderRoute: typeof ActivityAnalysisRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,17 +197,14 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ActivityAnalysisRoute: ActivityAnalysisRoute,
+  CollectionsRoute: CollectionsRoute,
+  CustomersRoute: CustomersRoute,
+  ExecutiveRoute: ExecutiveRoute,
+  ReportsRoute: ReportsRoute,
+  SalesRoute: SalesRoute,
+  StagnationRoute: StagnationRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
