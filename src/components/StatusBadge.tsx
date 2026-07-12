@@ -3,16 +3,16 @@ import { STATUS_LABEL } from "@/lib/customer-model";
 import { cn } from "@/lib/utils";
 
 const styles: Record<StatusKey, string> = {
-  active: "bg-status-active/15 text-status-active border-status-active/30",
-  atrisk: "bg-status-atrisk/15 text-status-atrisk border-status-atrisk/40",
-  stagnant: "bg-status-stagnant/15 text-status-stagnant border-status-stagnant/40",
-  inactive: "bg-status-inactive/15 text-status-inactive border-status-inactive/30",
+  active: "bg-status-active/20 text-status-active border-status-active/40",
+  atrisk: "bg-accent/30 text-accent-foreground border-accent/60",
+  stagnant: "bg-destructive/20 text-destructive border-destructive/50",
+  inactive: "bg-muted text-muted-foreground border-border",
 };
 
 const dots: Record<StatusKey, string> = {
   active: "bg-status-active",
-  atrisk: "bg-status-atrisk",
-  stagnant: "bg-status-stagnant",
+  atrisk: "bg-accent",
+  stagnant: "bg-destructive",
   inactive: "bg-status-inactive",
 };
 

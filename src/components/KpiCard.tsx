@@ -15,19 +15,28 @@ type KpiCardProps = {
 };
 
 const toneRing: Record<NonNullable<KpiCardProps["tone"]>, string> = {
-  primary: "before:bg-primary/60",
+  primary: "before:bg-primary",
   success: "before:bg-status-active",
-  warning: "before:bg-status-atrisk",
-  destructive: "before:bg-status-stagnant",
+  warning: "before:bg-accent",
+  destructive: "before:bg-destructive",
   info: "before:bg-info",
   muted: "before:bg-muted-foreground/40",
 };
 
+const toneShadow: Record<NonNullable<KpiCardProps["tone"]>, string> = {
+  primary: "shadow-teal-glow",
+  success: "shadow-teal-glow",
+  warning: "shadow-accent-glow",
+  destructive: "shadow-coral-glow",
+  info: "shadow-sky-glow",
+  muted: "shadow-card",
+};
+
 const toneIcon: Record<NonNullable<KpiCardProps["tone"]>, string> = {
-  primary: "bg-primary/10 text-primary",
+  primary: "bg-primary/15 text-primary",
   success: "bg-status-active/15 text-status-active",
-  warning: "bg-status-atrisk/15 text-status-atrisk",
-  destructive: "bg-status-stagnant/15 text-status-stagnant",
+  warning: "bg-accent/25 text-accent-foreground",
+  destructive: "bg-destructive/15 text-destructive",
   info: "bg-info/15 text-info",
   muted: "bg-muted text-muted-foreground",
 };
@@ -36,19 +45,20 @@ export function KpiCard({ label, value, hint, icon, trend, tone = "primary" }: K
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-xl border border-border bg-card p-5 shadow-sm",
-        "before:absolute before:inset-y-3 before:right-0 before:w-1 before:rounded-full",
+        "relative overflow-hidden rounded-2xl border border-border bg-card p-5 transition-transform hover:-translate-y-0.5",
+        "before:absolute before:inset-y-0 before:right-0 before:w-1.5",
         toneRing[tone],
+        toneShadow[tone],
       )}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <div className="text-xs font-semibold text-muted-foreground">{label}</div>
-          <div className="mt-1.5 text-2xl font-black tracking-tight text-foreground">{value}</div>
+          <div className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">{label}</div>
+          <div className="mt-2 text-3xl font-black tracking-tight text-foreground">{value}</div>
           {hint ? <div className="mt-1 text-[11px] text-muted-foreground">{hint}</div> : null}
         </div>
         {icon ? (
-          <div className={cn("flex h-10 w-10 items-center justify-center rounded-lg", toneIcon[tone])}>{icon}</div>
+          <div className={cn("flex h-11 w-11 items-center justify-center rounded-xl", toneIcon[tone])}>{icon}</div>
         ) : null}
       </div>
       {trend ? <TrendPill {...trend} /> : null}
