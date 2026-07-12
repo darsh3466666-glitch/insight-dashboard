@@ -201,7 +201,7 @@ function CollectionsPage() {
     <div className="space-y-6">
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">تحليل المقبوضات</h1>
+          <h1 className="text-2xl md:text-3xl font-black tracking-tight">تحليل المقبوضات</h1>
           <p className="mt-1 text-sm text-muted-foreground">نسب التحصيل، أعمار الأرصدة، تركّز الإيرادات، والمديونية.</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">

@@ -99,7 +99,7 @@ function UploadPage() {
   return (
     <div className="space-y-6">
       <header>
-        <h1 className="text-2xl font-bold tracking-tight text-foreground">رفع البيانات المصدرية</h1>
+        <h1 className="text-2xl md:text-3xl font-black tracking-tight text-foreground">رفع البيانات المصدرية</h1>
         <p className="mt-1 text-sm text-muted-foreground">
           البيانات الحالية محمّلة تلقائياً من شيتات 2024–2026. تقدر ترفع ملفات جديدة تحل محل السنة المطابقة.
         </p>

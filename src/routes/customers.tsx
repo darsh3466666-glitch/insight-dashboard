@@ -65,7 +65,7 @@ function CustomersPage() {
   return (
     <div className="space-y-6">
       <header>
-        <h1 className="text-2xl font-bold tracking-tight">رحلة العميل 360°</h1>
+        <h1 className="text-2xl md:text-3xl font-black tracking-tight">رحلة العميل 360°</h1>
         <p className="mt-1 text-sm text-muted-foreground">بروفايل كامل عبر السنوات: مبيعات، مقبوضات، ورصيد.</p>
       </header>
 
@@ -167,7 +167,7 @@ function CustomerProfile({ customer, years }: { customer: Customer; years: numbe
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-xl font-bold">{customer.name}</h2>
+              <h2 className="text-xl md:text-2xl font-black">{customer.name}</h2>
               <StatusBadge status={customer.statusOverall} />
             </div>
             <div className="mt-1 text-xs text-muted-foreground">
