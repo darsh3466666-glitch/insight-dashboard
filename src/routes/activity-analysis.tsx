@@ -126,7 +126,7 @@ function ActivityAnalysisPage() {
   const deltaNegative = summary.delta < 0;
 
   return (
-    <div className="space-y-6 p-4 lg:p-6" dir="rtl">
+    <div className="space-y-6" dir="rtl">
       <header className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <h1 className="flex items-center gap-2 text-2xl md:text-3xl font-black text-foreground">
