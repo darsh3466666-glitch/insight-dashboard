@@ -77,6 +77,9 @@ function ActivityAnalysisPage() {
   const [filter, setFilter] = useState<Filter>("new_dormant");
   const [q, setQ] = useState("");
   const [reasonFilter, setReasonFilter] = useState<"all" | DormancyReasonKey>("all");
+  const [colStatus, setColStatus] = useState<"all" | "active" | "atrisk" | "stagnant">("all");
+  const [colPattern, setColPattern] = useState<"all" | PatternKey>("all");
+  const [balanceFilter, setBalanceFilter] = useState<"all" | "positive" | "zero" | "negative">("all");
   const [selected, setSelected] = useState<CustomerActivity | null>(null);
 
   const rows = useMemo(
