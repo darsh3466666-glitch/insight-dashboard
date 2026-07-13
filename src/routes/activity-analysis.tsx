@@ -77,6 +77,9 @@ function ActivityAnalysisPage() {
   const [filter, setFilter] = useState<Filter>("new_dormant");
   const [q, setQ] = useState("");
   const [reasonFilter, setReasonFilter] = useState<"all" | DormancyReasonKey>("all");
+  const [colStatus, setColStatus] = useState<"all" | "active" | "atrisk" | "stagnant">("all");
+  const [colPattern, setColPattern] = useState<"all" | PatternKey>("all");
+  const [balanceFilter, setBalanceFilter] = useState<"all" | "positive" | "zero" | "negative">("all");
   const [selected, setSelected] = useState<CustomerActivity | null>(null);
 
   const rows = useMemo(
@@ -104,13 +107,20 @@ function ActivityAnalysisPage() {
         break;
     }
     if (reasonFilter !== "all") base = base.filter((r) => r.reason === reasonFilter);
+    if (colStatus !== "all") base = base.filter((r) => r.currentStatus === colStatus);
+    if (colPattern !== "all") base = base.filter((r) => r.pattern === colPattern);
+    if (balanceFilter !== "all") {
+      base = base.filter((r) =>
+        balanceFilter === "positive" ? r.balance > 0 : balanceFilter === "negative" ? r.balance < 0 : r.balance === 0,
+      );
+    }
     if (q) {
       base = base.filter(
         (r) => r.customer.name.includes(q) || r.customer.code.includes(q),
       );
     }
     return [...base].sort((a, b) => b.historicalSales - a.historicalSales);
-  }, [rows, filter, reasonFilter, q]);
+  }, [rows, filter, reasonFilter, colStatus, colPattern, balanceFilter, q]);
 
   const topPatterns = useMemo(() => {
     const counts: Record<string, number> = {};
@@ -324,6 +334,88 @@ function ActivityAnalysisPage() {
                 <th className="p-3 text-right">تحصيل</th>
                 <th className="p-3"></th>
               </tr>
+              <tr className="border-t border-border/60 bg-background/40">
+                <th className="p-2 text-right">
+                  <Input
+                    value={q}
+                    onChange={(e) => setQ(e.target.value)}
+                    placeholder="بحث..."
+                    className="h-8 text-xs"
+                  />
+                </th>
+                <th className="p-2 text-right">
+                  <MiniSelect
+                    value={colStatus}
+                    onChange={(v) => setColStatus(v as typeof colStatus)}
+                    options={[
+                      { v: "all", l: "الكل" },
+                      { v: "active", l: "نشط" },
+                      { v: "atrisk", l: "متعثر" },
+                      { v: "stagnant", l: "راكد" },
+                    ]}
+                  />
+                </th>
+                <th className="p-2"></th>
+                <th className="p-2 text-right">
+                  <MiniSelect
+                    value={colPattern}
+                    onChange={(v) => setColPattern(v as typeof colPattern)}
+                    options={[
+                      { v: "all", l: "الكل" },
+                      ...(Object.keys(PATTERN_LABEL) as PatternKey[]).map((k) => ({
+                        v: k,
+                        l: PATTERN_LABEL[k],
+                      })),
+                    ]}
+                  />
+                </th>
+                <th className="p-2 text-right">
+                  <MiniSelect
+                    value={reasonFilter}
+                    onChange={(v) => setReasonFilter(v as typeof reasonFilter)}
+                    options={[
+                      { v: "all", l: "الكل" },
+                      ...(Object.keys(DORMANCY_REASON_LABEL) as DormancyReasonKey[]).map((k) => ({
+                        v: k,
+                        l: DORMANCY_REASON_LABEL[k],
+                      })),
+                    ]}
+                  />
+                </th>
+                <th className="p-2"></th>
+                <th className="p-2 text-right">
+                  <MiniSelect
+                    value={balanceFilter}
+                    onChange={(v) => setBalanceFilter(v as typeof balanceFilter)}
+                    options={[
+                      { v: "all", l: "الكل" },
+                      { v: "positive", l: "مدين" },
+                      { v: "zero", l: "صفر" },
+                      { v: "negative", l: "دائن" },
+                    ]}
+                  />
+                </th>
+                <th className="p-2"></th>
+                <th className="p-2 text-right">
+                  {(colStatus !== "all" || colPattern !== "all" || reasonFilter !== "all" || balanceFilter !== "all" || q) && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-7 px-2 text-[10px]"
+                      onClick={() => {
+                        setColStatus("all");
+                        setColPattern("all");
+                        setReasonFilter("all");
+                        setBalanceFilter("all");
+                        setQ("");
+                      }}
+                    >
+                      مسح
+                      <X className="mr-1 h-3 w-3" />
+                    </Button>
+                  )}
+                </th>
+              </tr>
             </thead>
             <tbody>
               {filtered.slice(0, 200).map((r) => (
@@ -412,6 +504,30 @@ function ActivityAnalysisPage() {
         </SheetContent>
       </Sheet>
     </div>
+  );
+}
+
+function MiniSelect({
+  value,
+  onChange,
+  options,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  options: Array<{ v: string; l: string }>;
+}) {
+  return (
+    <select
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className="h-8 w-full rounded-md border border-input bg-background px-2 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-ring"
+    >
+      {options.map((o) => (
+        <option key={o.v} value={o.v}>
+          {o.l}
+        </option>
+      ))}
+    </select>
   );
 }
 
