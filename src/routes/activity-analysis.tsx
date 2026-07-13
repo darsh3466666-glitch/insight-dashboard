@@ -246,7 +246,7 @@ function ActivityAnalysisPage() {
       {/* Patterns pushing customers away */}
       {topPatterns.length > 0 && (
         <Section
-          title="أنماط تُطفّش العملاء"
+          title="أنماط العملاء"
           description="أكثر الأنماط انتشارًا بين الراكدين الجدد"
         >
           <div className="grid gap-3 p-4 md:grid-cols-3">
