@@ -107,13 +107,20 @@ function ActivityAnalysisPage() {
         break;
     }
     if (reasonFilter !== "all") base = base.filter((r) => r.reason === reasonFilter);
+    if (colStatus !== "all") base = base.filter((r) => r.currentStatus === colStatus);
+    if (colPattern !== "all") base = base.filter((r) => r.pattern === colPattern);
+    if (balanceFilter !== "all") {
+      base = base.filter((r) =>
+        balanceFilter === "positive" ? r.balance > 0 : balanceFilter === "negative" ? r.balance < 0 : r.balance === 0,
+      );
+    }
     if (q) {
       base = base.filter(
         (r) => r.customer.name.includes(q) || r.customer.code.includes(q),
       );
     }
     return [...base].sort((a, b) => b.historicalSales - a.historicalSales);
-  }, [rows, filter, reasonFilter, q]);
+  }, [rows, filter, reasonFilter, colStatus, colPattern, balanceFilter, q]);
 
   const topPatterns = useMemo(() => {
     const counts: Record<string, number> = {};
