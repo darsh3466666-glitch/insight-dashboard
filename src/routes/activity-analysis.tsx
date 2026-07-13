@@ -507,6 +507,30 @@ function ActivityAnalysisPage() {
   );
 }
 
+function MiniSelect({
+  value,
+  onChange,
+  options,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  options: Array<{ v: string; l: string }>;
+}) {
+  return (
+    <select
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className="h-8 w-full rounded-md border border-input bg-background px-2 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-ring"
+    >
+      {options.map((o) => (
+        <option key={o.v} value={o.v}>
+          {o.l}
+        </option>
+      ))}
+    </select>
+  );
+}
+
 function patternAdvice(p: PatternKey): string {
   switch (p) {
     case "regular":
