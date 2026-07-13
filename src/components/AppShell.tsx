@@ -10,6 +10,7 @@ import {
   Upload,
   TrendingUp,
   Activity,
+  Printer,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "./ThemeToggle";
@@ -113,7 +114,19 @@ export function AppShell({ children }: { children: ReactNode }) {
       </div>
 
       <main className="lg:mr-72">
-        <div className="mx-auto max-w-[1600px] px-4 py-6 lg:px-8 lg:py-8">{children}</div>
+        <div className="mx-auto max-w-[1600px] px-4 py-6 lg:px-8 lg:py-8">
+          <div className="no-print mb-4 flex justify-end">
+            <button
+              type="button"
+              onClick={() => window.print()}
+              className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-bold text-primary-foreground shadow-teal-glow transition-transform hover:scale-[1.02]"
+            >
+              <Printer className="h-4 w-4" />
+              طباعة التقرير
+            </button>
+          </div>
+          {children}
+        </div>
       </main>
     </div>
   );
