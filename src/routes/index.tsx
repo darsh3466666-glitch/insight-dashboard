@@ -120,9 +120,17 @@ function UploadPage() {
         description="تسمية الملف يفضّل تحتوي على السنة و‏‎(‎مبيعات / مقبوضات‎)‎ حتى يتم التصنيف تلقائياً."
         actions={
           <div className="flex gap-2">
-            <Button variant="outline" onClick={() => store.resetToSeed()}>
+            <Button
+              variant="outline"
+              onClick={() => {
+                if (confirm("سيتم مسح كل بيانات المبيعات والمقبوضات المرفوعة. هل أنت متأكد؟")) {
+                  store.clearAll();
+                  setItems([]);
+                }
+              }}
+            >
               <RefreshCw className="mr-1 h-4 w-4" />
-              إرجاع البيانات المصدرية
+              مسح كل البيانات
             </Button>
           </div>
         }
