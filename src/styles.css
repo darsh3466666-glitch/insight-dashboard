@@ -244,11 +244,11 @@
 @media print {
   @page {
     size: A4;
-    margin: 16mm 12mm 18mm 12mm;
+    margin: 14mm 10mm 16mm 10mm;
     @bottom-center {
       content: "صفحة " counter(page) " من " counter(pages);
       font-family: "Cairo", sans-serif;
-      font-size: 9pt;
+      font-size: 8.5pt;
       color: #6b7280;
     }
   }
@@ -256,20 +256,25 @@
   html, body {
     background: #ffffff !important;
     color: #0b1220 !important;
-    font-size: 10.5pt !important;
-    line-height: 1.5 !important;
+    font-size: 9.5pt !important;
+    line-height: 1.45 !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
     background-image: none !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
-  /* Hide app chrome */
+  /* Hide app chrome — sidebar, mobile bar, all buttons/filters */
   .no-print,
   aside,
   header.sticky,
   .lg\:hidden,
+  nav,
   button,
   [role="tablist"],
+  [role="tab"],
   input,
   select,
   textarea,
@@ -277,102 +282,132 @@
     display: none !important;
   }
 
-  /* Restore layout: no sidebar offset, full width */
+  /* Full-width layout with no sidebar offset */
   main,
   .lg\:mr-72 {
     margin: 0 !important;
     padding: 0 !important;
     display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
   }
   main > div,
   main > div > div {
     max-width: 100% !important;
+    width: 100% !important;
     padding: 0 !important;
     margin: 0 !important;
   }
 
-  /* Print report header on every page */
+  /* Report title on every page */
   body::before {
     content: attr(data-print-title);
     display: block;
     font-family: "Cairo", sans-serif;
-    font-size: 14pt;
+    font-size: 13pt;
     font-weight: 900;
     color: #1E8C86;
-    border-bottom: 3px solid #2BA8A2;
-    padding-bottom: 6px;
-    margin-bottom: 14px;
+    border-bottom: 2.5px solid #2BA8A2;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
     text-align: center;
     letter-spacing: 0.02em;
   }
 
-  /* Typography scale for print */
-  h1 { font-size: 16pt !important; margin: 0 0 6pt !important; color: #0f2423 !important; }
-  h2 { font-size: 13pt !important; margin: 10pt 0 6pt !important; color: #1E8C86 !important; }
-  h3 { font-size: 11pt !important; margin: 6pt 0 4pt !important; }
-  p  { font-size: 10pt !important; }
+  /* Typography */
+  h1 { font-size: 14pt !important; margin: 0 0 4pt !important; color: #0f2423 !important; font-weight: 900 !important; }
+  h2 { font-size: 11.5pt !important; margin: 8pt 0 4pt !important; color: #1E8C86 !important; font-weight: 800 !important; }
+  h3 { font-size: 10pt !important; margin: 5pt 0 3pt !important; font-weight: 800 !important; }
+  p  { font-size: 9pt !important; margin: 2pt 0 !important; }
 
-  /* Cards: flat, bordered, readable */
+  /* Cards: flat, bordered, no shadows */
   .flip7-card,
   section,
   [class*="rounded-2xl"],
   [class*="rounded-xl"],
   [class*="rounded-lg"] {
     box-shadow: none !important;
-    border-radius: 6px !important;
+    border-radius: 4px !important;
     background: #ffffff !important;
-    border: 1px solid #d6ebea !important;
+    border: 1px solid #cfe4e2 !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
   }
 
-  /* Section header dashed divider → solid for print */
+  /* Section headers */
+  section {
+    margin-bottom: 8pt !important;
+  }
   section > header {
-    border-bottom: 2px solid #2BA8A2 !important;
-    background: #f4fbfa !important;
-    padding: 8px 12px !important;
+    border-bottom: 1.5px solid #2BA8A2 !important;
+    border-radius: 0 !important;
+    background: #eef8f7 !important;
+    padding: 5px 10px !important;
+  }
+  section > header h2 {
+    margin: 0 !important;
+    font-size: 10.5pt !important;
   }
   section > div {
-    padding: 10px 12px !important;
+    padding: 8px 10px !important;
   }
 
-  /* Stack multi-column grids to fit A4 width */
-  [class*="grid-cols-3"],
+  /* KPI grid: 4 across on A4 portrait */
   [class*="grid-cols-4"],
   [class*="grid-cols-5"],
-  [class*="grid-cols-6"] {
+  [class*="grid-cols-6"],
+  [class*="lg:grid-cols-4"],
+  [class*="md:grid-cols-4"],
+  [class*="xl:grid-cols-4"],
+  [class*="lg:grid-cols-5"],
+  [class*="md:grid-cols-5"],
+  [class*="lg:grid-cols-6"] {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 6px !important;
+  }
+  [class*="grid-cols-3"],
+  [class*="lg:grid-cols-3"],
+  [class*="md:grid-cols-3"] {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 6px !important;
+  }
+  [class*="grid-cols-2"],
+  [class*="lg:grid-cols-2"],
+  [class*="md:grid-cols-2"] {
     display: grid !important;
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 8px !important;
-  }
-  [class*="lg:grid-cols-"],
-  [class*="md:grid-cols-"],
-  [class*="xl:grid-cols-"] {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 6px !important;
   }
 
-  /* KPI cards compact */
-  .flip7-accent-bar { padding: 8px 10px !important; }
+  /* KPI card compact */
+  .flip7-accent-bar { padding: 6px 8px !important; }
+  .flip7-accent-bar::before { width: 4px !important; }
 
-  /* Charts: constrain height so recharts SVG doesn't overflow */
+  /* Charts: fixed height, contain within page */
   .recharts-responsive-container,
   .recharts-wrapper {
-    max-height: 260px !important;
-    height: 260px !important;
+    max-height: 220px !important;
+    height: 220px !important;
     width: 100% !important;
     break-inside: avoid !important;
+    page-break-inside: avoid !important;
   }
   .recharts-surface { overflow: visible !important; }
+  .recharts-text { font-size: 8pt !important; }
 
-  /* Tables: professional report look */
+  /* Tables */
   table {
     width: 100% !important;
     border-collapse: collapse !important;
-    font-size: 9.5pt !important;
-    margin-top: 4pt !important;
+    font-size: 8.5pt !important;
+    margin-top: 3pt !important;
   }
   thead { display: table-header-group !important; }
   tfoot { display: table-footer-group !important; }
   th, td {
-    padding: 5px 7px !important;
+    padding: 4px 6px !important;
     border: 1px solid #d6ebea !important;
     text-align: right !important;
     vertical-align: middle !important;
@@ -381,25 +416,19 @@
     background: #1E8C86 !important;
     color: #ffffff !important;
     font-weight: 800 !important;
-    font-size: 9.5pt !important;
+    font-size: 8.5pt !important;
   }
   tbody tr:nth-child(even) td { background: #f4fbfa !important; }
-  tr, img, .recharts-wrapper { page-break-inside: avoid; break-inside: avoid; }
+  tr, img { page-break-inside: avoid; break-inside: avoid; }
 
-  /* Force each top-level Section onto its own space; allow flow but avoid mid-card breaks */
-  main > div > div > section,
+  /* Space between top-level sections */
   main > div > div > * {
     break-inside: avoid;
     page-break-inside: avoid;
-    margin-bottom: 12px !important;
+    margin-bottom: 8px !important;
   }
 
-  /* Add a soft page-break before each Section after the first, so long dashboards paginate cleanly */
-  main > div > div > section + section {
-    break-before: auto;
-  }
-
-  /* Force text colors legible on paper */
+  /* Legible colors on paper */
   [class*="text-muted-foreground"] { color: #4b5563 !important; }
   [class*="text-primary"] { color: #1E8C86 !important; }
   [class*="text-destructive"] { color: #b3421f !important; }
@@ -407,11 +436,15 @@
   [class*="text-status-atrisk"] { color: #8a6a00 !important; }
   [class*="text-status-stagnant"] { color: #b3421f !important; }
 
-  /* Status badges — keep tinted background */
+  /* Status badges */
   [class*="bg-status-active"] { background: #dcfce7 !important; color: #0f7a3e !important; }
   [class*="bg-status-atrisk"] { background: #fef3c7 !important; color: #8a6a00 !important; }
   [class*="bg-status-stagnant"] { background: #fee2e2 !important; color: #b3421f !important; }
 
   a[href]::after { content: ""; }
+
+  /* Hide sonner toasts / overlays */
+  [data-sonner-toaster], [role="dialog"], [role="alertdialog"] { display: none !important; }
 }
+
 

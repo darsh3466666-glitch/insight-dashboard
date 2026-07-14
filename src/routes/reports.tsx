@@ -8,7 +8,7 @@ import { Section } from "@/components/Section";
 import { Button } from "@/components/ui/button";
 import { fmtInt, fmtPct } from "@/lib/format";
 import { STATUS_LABEL } from "@/lib/customer-model";
-import { printHtml } from "@/lib/print";
+
 
 export const Route = createFileRoute("/reports")({
   head: () => ({
@@ -95,31 +95,18 @@ function ReportsPage() {
   }
 
   function printReport() {
-    const rows = kpiRows
-      .map(
-        (r) => `<tr>
-          <td class="num"><strong>${r.y}</strong></td>
-          <td class="num">${fmtInt(r.sales)}</td>
-          <td class="num">${fmtInt(r.collections)}</td>
-          <td class="num">${fmtInt(r.balance)}</td>
-          <td class="num">${fmtPct(r.rate)}</td>
-        </tr>`,
-      )
-      .join("");
-    const html = `
-      <div class="header">
-        <div>
-          <div class="brand">تقرير المبيعات والمقبوضات — ${meta.currentYear}</div>
-          <div class="muted">يغطي الفترة ${meta.years[0]}–${meta.years[meta.years.length - 1]}</div>
-        </div>
-        <div class="muted">${new Date().toLocaleDateString("ar-EG")}</div>
-      </div>
-      <h2>الملخّص التنفيذي</h2>
-      <table>
-        <thead><tr><th>السنة</th><th>المبيعات</th><th>المقبوضات</th><th>الرصيد</th><th>نسبة التحصيل</th></tr></thead>
-        <tbody>${rows}</tbody>
-      </table>`;
-    printHtml("الملخّص التنفيذي", html);
+    const title = "تقرير المبيعات والمقبوضات";
+    const date = new Date().toLocaleDateString("ar-EG", { year: "numeric", month: "long", day: "numeric" });
+    document.body.setAttribute("data-print-title", `${title} · ${date}`);
+    const prev = document.title;
+    document.title = title;
+    const cleanup = () => {
+      document.title = prev;
+      document.body.removeAttribute("data-print-title");
+      window.removeEventListener("afterprint", cleanup);
+    };
+    window.addEventListener("afterprint", cleanup);
+    window.print();
   }
 
     let cumulativeBalance = 0;
