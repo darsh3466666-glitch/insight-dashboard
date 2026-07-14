@@ -8,7 +8,7 @@ import { Section } from "@/components/Section";
 import { Button } from "@/components/ui/button";
 import { fmtInt, fmtPct } from "@/lib/format";
 import { STATUS_LABEL } from "@/lib/customer-model";
-import { printHtml } from "@/lib/print";
+
 
 export const Route = createFileRoute("/reports")({
   head: () => ({
