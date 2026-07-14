@@ -52,7 +52,7 @@ export const useDataStore = create<State>()(
         }),
       resetToSeed: () =>
         set({ sales: seed.sales, collections: seed.collections, meta: seed.meta, hasCustomData: false }),
-      clearAll: () => set({ sales: [], collections: [], meta: seed.meta, hasCustomData: true }),
+      clearAll: () => set({ sales: [], collections: [], meta: seed.meta, manualLinks: {}, hasCustomData: true }),
     }),
     {
       name: "scip-dataset-v1",
