@@ -118,7 +118,30 @@ export function AppShell({ children }: { children: ReactNode }) {
           <div className="no-print mb-4 flex justify-end">
             <button
               type="button"
-              onClick={() => window.print()}
+              onClick={() => {
+                const current = NAV.find((n) => n.to === location.pathname);
+                const title = current
+                  ? `${current.label} — منصّة المبيعات والمقبوضات`
+                  : "منصّة المبيعات والمقبوضات";
+                const date = new Date().toLocaleDateString("ar-EG", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                });
+                document.body.setAttribute(
+                  "data-print-title",
+                  `${title} · ${date}`,
+                );
+                const prevTitle = document.title;
+                document.title = title;
+                const cleanup = () => {
+                  document.title = prevTitle;
+                  document.body.removeAttribute("data-print-title");
+                  window.removeEventListener("afterprint", cleanup);
+                };
+                window.addEventListener("afterprint", cleanup);
+                window.print();
+              }}
               className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-bold text-primary-foreground shadow-teal-glow transition-transform hover:scale-[1.02]"
             >
               <Printer className="h-4 w-4" />
@@ -128,6 +151,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           {children}
         </div>
       </main>
+
     </div>
   );
 }
