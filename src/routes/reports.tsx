@@ -8,6 +8,7 @@ import { Section } from "@/components/Section";
 import { Button } from "@/components/ui/button";
 import { fmtInt, fmtPct } from "@/lib/format";
 import { STATUS_LABEL } from "@/lib/customer-model";
+import { escapeHtml, printHtml } from "@/lib/print";
 
 
 export const Route = createFileRoute("/reports")({
@@ -96,17 +97,58 @@ function ReportsPage() {
 
   function printReport() {
     const title = "تقرير المبيعات والمقبوضات";
-    const date = new Date().toLocaleDateString("ar-EG", { year: "numeric", month: "long", day: "numeric" });
-    document.body.setAttribute("data-print-title", `${title} · ${date}`);
-    const prev = document.title;
-    document.title = title;
-    const cleanup = () => {
-      document.title = prev;
-      document.body.removeAttribute("data-print-title");
-      window.removeEventListener("afterprint", cleanup);
-    };
-    window.addEventListener("afterprint", cleanup);
-    window.print();
+    const topCustomers = customers
+      .slice()
+      .sort((a, b) => b.salesAll - a.salesAll)
+      .slice(0, 20)
+      .map(
+        (c, i) => `<tr>
+          <td class="num">${i + 1}</td>
+          <td>${escapeHtml(c.name)}<div class="muted">${escapeHtml(c.code)}</div></td>
+          <td>${c.abc}</td>
+          <td><span class="pill pill-${c.statusOverall === "active" ? "green" : c.statusOverall === "atrisk" ? "amber" : c.statusOverall === "stagnant" ? "red" : "gray"}">${STATUS_LABEL[c.statusOverall]}</span></td>
+          <td class="num">${fmtInt(c.salesAll)}</td>
+          <td class="num">${fmtInt(c.collectionsAll)}</td>
+          <td class="num">${fmtInt(c.balanceAll)}</td>
+          <td class="num">${fmtPct(c.collectionRateAll)}</td>
+        </tr>`,
+      )
+      .join("");
+
+    const summaryRows = kpiRows
+      .map(
+        (r) => `<tr>
+          <td class="num"><strong>${r.y}</strong></td>
+          <td class="num">${fmtInt(r.sales)}</td>
+          <td class="num">${fmtInt(r.collections)}</td>
+          <td class="num">${fmtInt(r.balance)}</td>
+          <td class="num">${fmtPct(r.rate)}</td>
+        </tr>`,
+      )
+      .join("");
+
+    const html = `
+      <div class="grid-4">
+        <div class="card"><div class="k">عدد سنوات التقرير</div><div class="v">${meta.years.length}</div></div>
+        <div class="card"><div class="k">عدد العملاء</div><div class="v">${fmtInt(customers.length)}</div></div>
+        <div class="card"><div class="k">إجمالي المبيعات</div><div class="v">${fmtInt(customers.reduce((a, c) => a + c.salesAll, 0))} ج.م</div></div>
+        <div class="card"><div class="k">إجمالي المقبوضات</div><div class="v">${fmtInt(customers.reduce((a, c) => a + c.collectionsAll, 0))} ج.م</div></div>
+      </div>
+      <h2>ملخّص السنوات</h2>
+      <table>
+        <thead><tr><th>السنة</th><th>المبيعات</th><th>المقبوضات</th><th>الرصيد التراكمي</th><th>نسبة التحصيل</th></tr></thead>
+        <tbody>${summaryRows}</tbody>
+      </table>
+      <h2>أعلى العملاء بالمبيعات</h2>
+      <table>
+        <thead><tr><th>#</th><th>العميل</th><th>ABC</th><th>الحالة</th><th>المبيعات</th><th>المقبوضات</th><th>الرصيد</th><th>التحصيل %</th></tr></thead>
+        <tbody>${topCustomers}</tbody>
+      </table>
+    `;
+    printHtml(title, html, {
+      orientation: "landscape",
+      subtitle: `الفترة ${meta.years[0]}–${meta.years[meta.years.length - 1]} · تقرير إداري منسق للطباعة`,
+    });
   }
 
     let cumulativeBalance = 0;
