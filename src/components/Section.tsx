@@ -23,7 +23,7 @@ export function Section({ title, description, actions, children, className, cont
           <h2 className="text-lg font-black tracking-tight text-foreground">{title}</h2>
           {description ? <p className="mt-1 text-xs text-muted-foreground">{description}</p> : null}
         </div>
-        {actions ? <div className="flex flex-wrap items-center gap-2">{actions}</div> : null}
+        {actions ? <div className="no-print flex flex-wrap items-center gap-2">{actions}</div> : null}
       </header>
       <div className={cn("p-5", contentClassName)}>{children}</div>
     </section>
