@@ -18,6 +18,19 @@ export function printHtml(title: string, bodyHtml: string, opts?: PrintOptions) 
   const subtitle = opts?.subtitle ? `<div class="report-subtitle">${escapeHtml(opts.subtitle)}</div>` : "";
   const css = `
     @page { size: A4 ${orientation}; margin: 9mm 9mm 11mm; }
+    :root {
+      --color-background: #EFF8F7;
+      --color-foreground: #1a2a2a;
+      --color-card: #ffffff;
+      --color-muted-foreground: #5b6b6b;
+      --color-primary: #2BA8A2;
+      --color-status-active: #27AE60;
+      --color-status-atrisk: #FFD23F;
+      --color-status-stagnant: #EF6C4A;
+      --color-destructive: #EF6C4A;
+      --color-info: #5DADE2;
+      --color-border: #d6ebea;
+    }
     * { box-sizing: border-box; }
     html, body {
       margin: 0;
@@ -125,15 +138,16 @@ export function printHtml(title: string, bodyHtml: string, opts?: PrintOptions) 
     .screen-report [class*="grid"] { display: grid; gap: 7px; }
     .screen-report [class*="grid-cols-6"],
     .screen-report [class*="grid-cols-5"],
-    .screen-report [class*="grid-cols-4"],
-    .screen-report [class*="lg:grid-cols-6"],
-    .screen-report [class*="lg:grid-cols-5"],
-    .screen-report [class*="lg:grid-cols-4"],
-    .screen-report [class*="sm:grid-cols-2"] { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .screen-report [class*="grid-cols-4"] { grid-template-columns: repeat(4, minmax(0, 1fr)); }
     .screen-report [class*="grid-cols-3"],
     .screen-report [class*="lg:grid-cols-3"] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .screen-report [class*="grid-cols-2"],
-    .screen-report [class*="md:grid-cols-2"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .screen-report [class*="md:grid-cols-2"],
+    .screen-report [class*="sm:grid-cols-2"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .screen-report [class*="lg:grid-cols-6"],
+    .screen-report [class*="lg:grid-cols-5"],
+    .screen-report [class*="lg:grid-cols-4"] { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .screen-report [class*="lg:grid-cols-3"] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .screen-report [class*="rounded-2xl"][class*="border"],
     .screen-report [class*="rounded-xl"][class*="border"],
     .screen-report [class*="rounded-lg"][class*="border"] {
@@ -205,11 +219,36 @@ export function printCurrentPageReport(title: string, opts?: PrintOptions) {
 }
 
 function sanitizePrintClone(root: HTMLElement) {
+  const controls = root.querySelectorAll('button, input, select, textarea, [role="tablist"], [role="tab"]');
+  controls.forEach((control) => {
+    let el = control.parentElement;
+    while (el && el !== root) {
+      if (isPrintPanelCandidate(el)) {
+        el.setAttribute("data-print-control-panel", "true");
+        break;
+      }
+      el = el.parentElement;
+    }
+  });
+
   root
     .querySelectorAll(
       '.no-print, .print-hide, script, style, button, input, select, textarea, [role="tablist"], [role="tab"], [data-sonner-toaster], [role="dialog"], [role="alertdialog"]',
     )
     .forEach((el) => el.remove());
+
+  root.querySelectorAll<HTMLElement>('[data-print-control-panel="true"]').forEach((panel) => {
+    const hasDataContent = panel.querySelector("table, svg, img, canvas, h1, h2, h3");
+    const text = panel.textContent?.replace(/\s+/g, " ").trim() ?? "";
+    if (!hasDataContent && text.length < 240) panel.remove();
+  });
+
+  for (let i = 0; i < 4; i++) {
+    root.querySelectorAll<HTMLElement>("div, section").forEach((el) => {
+      const text = el.textContent?.replace(/\s+/g, " ").trim() ?? "";
+      if (!text && !el.querySelector("table, svg, img, canvas")) el.remove();
+    });
+  }
 
   root.querySelectorAll("a").forEach((a) => {
     a.removeAttribute("href");
@@ -220,6 +259,17 @@ function sanitizePrintClone(root: HTMLElement) {
     svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
     svg.removeAttribute("tabindex");
   });
+}
+
+function isPrintPanelCandidate(el: HTMLElement): boolean {
+  const cls = el.getAttribute("class") ?? "";
+  return (
+    cls.includes("inline-flex") ||
+    cls.includes("flex") ||
+    cls.includes("grid") ||
+    cls.includes("space-y") ||
+    (cls.includes("rounded") && cls.includes("border"))
+  );
 }
 
 function currentPageSubtitle(root: HTMLElement): string {
