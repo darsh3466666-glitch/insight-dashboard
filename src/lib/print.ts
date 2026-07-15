@@ -225,7 +225,6 @@ function sanitizePrintClone(root: HTMLElement) {
     while (el && el !== root) {
       if (isPrintPanelCandidate(el)) {
         el.setAttribute("data-print-control-panel", "true");
-        break;
       }
       el = el.parentElement;
     }
@@ -240,7 +239,7 @@ function sanitizePrintClone(root: HTMLElement) {
   root.querySelectorAll<HTMLElement>('[data-print-control-panel="true"]').forEach((panel) => {
     const hasDataContent = panel.querySelector("table, svg, img, canvas, h1, h2, h3");
     const text = panel.textContent?.replace(/\s+/g, " ").trim() ?? "";
-    if (!hasDataContent && text.length < 240) panel.remove();
+    if (!hasDataContent && text.length < 420) panel.remove();
   });
 
   for (let i = 0; i < 4; i++) {

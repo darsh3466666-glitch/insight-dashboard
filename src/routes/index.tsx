@@ -118,6 +118,7 @@ function UploadPage() {
       <Section
         title="ارفع ملفات إكسل (مبيعات / مقبوضات)"
         description="تسمية الملف يفضّل تحتوي على السنة و‏‎(‎مبيعات / مقبوضات‎)‎ حتى يتم التصنيف تلقائياً."
+        className="no-print"
         actions={
           <div className="flex gap-2">
             <Button
@@ -196,7 +197,7 @@ function UploadPage() {
         )}
       </Section>
 
-      <Section title="ابدأ التحليل" description="بعد التأكد من البيانات، افتح واحدة من الصفحات التالية:">
+      <Section className="no-print" title="ابدأ التحليل" description="بعد التأكد من البيانات، افتح واحدة من الصفحات التالية:">
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {[
             { to: "/executive", label: "الملخّص التنفيذي" },
