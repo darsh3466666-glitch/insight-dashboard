@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "./ThemeToggle";
+import { printCurrentPageReport } from "@/lib/print";
 
 type NavItem = { to: string; label: string; icon: typeof Upload; description: string };
 
@@ -114,7 +115,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       </div>
 
       <main className="lg:mr-72">
-        <div className="mx-auto max-w-[1600px] px-4 py-6 lg:px-8 lg:py-8">
+        <div data-print-root className="mx-auto max-w-[1600px] px-4 py-6 lg:px-8 lg:py-8">
           <div className="no-print mb-4 flex justify-end">
             <button
               type="button"
@@ -123,24 +124,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 const title = current
                   ? `${current.label} — منصّة المبيعات والمقبوضات`
                   : "منصّة المبيعات والمقبوضات";
-                const date = new Date().toLocaleDateString("ar-EG", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                });
-                document.body.setAttribute(
-                  "data-print-title",
-                  `${title} · ${date}`,
-                );
-                const prevTitle = document.title;
-                document.title = title;
-                const cleanup = () => {
-                  document.title = prevTitle;
-                  document.body.removeAttribute("data-print-title");
-                  window.removeEventListener("afterprint", cleanup);
-                };
-                window.addEventListener("afterprint", cleanup);
-                window.print();
+                printCurrentPageReport(title, { orientation: "landscape" });
               }}
               className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-bold text-primary-foreground shadow-teal-glow transition-transform hover:scale-[1.02]"
             >
